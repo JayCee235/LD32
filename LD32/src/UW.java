@@ -1,19 +1,19 @@
 import javax.swing.JFrame;
 
 
-public class UnconventionalWeapon {
-	private static final String TITLE = " Ludum Dare 32!";
-	private static final int WIDTH = 800, HEIGHT = 600;
+public class UW {
+	public static final String TITLE = " Ludum Dare 32!";
+	public static final int WIDTH = 800, HEIGHT = 600;
 	
 	private JFrame frame;
 	private Game game;
 	
 	public static void main(String[] args) {
-		UnconventionalWeapon UW = new UnconventionalWeapon();
+		UW UW = new UW();
 		
 	}
 	
-	public UnconventionalWeapon() {
+	public UW() {
 		this.frame = new JFrame(TITLE);
 		this.game = new Game(WIDTH, HEIGHT);
 		

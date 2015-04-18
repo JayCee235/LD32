@@ -3,27 +3,45 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 
 public class Player extends Entity{
-	private int x, y;
 	private int[] controls;
 	private boolean[] keys;
+	
+	private int cooldown;
+	
+	private Game game;
 
-	public Player(int x, int y, boolean[] keys) {
-		super(x, y, 5);
+	public Player(Game game, int x, int y, boolean[] keys) {
+		super(game, x, y, 5);
 		
 		this.keys = keys;
 		
-		this.controls = new int[] { KeyEvent.VK_W, KeyEvent.VK_A,
-				KeyEvent.VK_S, KeyEvent.VK_D, KeyEvent.VK_SPACE };
+		this.controls = new int[] { KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, 
+				KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_DOWN, KeyEvent.VK_RIGHT};
+		
+		this.game = game;
 	}
 	
 	public void tick() {
-		super.tick();
 		Direction[] d = Direction.list();
 		for(int i = 0; i < 4; i++) {
 			if(keys[this.controls[i]]) {
 				this.move(d[i]);
 			}
 		}
+		for(int i = 4; i < 8; i++) {
+			if(this.cooldown == 0 && keys[this.controls[i]]) {
+				game.addEntity(new Card(this.game, this.x, this.y, d[i-4]));
+				this.cooldown = 20;
+			}
+		}
+		if(this.cooldown > 0) {
+			this.cooldown--;
+		}
+	}
+	
+	public void draw(Graphics g) {
+		g.setColor(Color.red);
+		g.fillRect(this.x, this.y, 32, 32);
 	}
 	
 

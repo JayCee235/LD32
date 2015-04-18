@@ -26,7 +26,7 @@ public class Game extends JComponent implements KeyListener, Runnable{
 		toAdd = new ArrayList<Entity>();
 		keys = new boolean[256];
 		
-		this.player = new Player(100, 100, keys);
+		this.player = new Player(this, 100, 100, keys);
 		this.list.add(this.player);
 	}
 	
@@ -50,6 +50,14 @@ public class Game extends JComponent implements KeyListener, Runnable{
 		for(int i = 0; i < list.size(); i++) {
 			list.get(i).draw(g);
 		}
+	}
+	
+	public void addEntity(Entity e) {
+		this.toAdd.add(e);
+	}
+	
+	public void removeEntity(Entity e) {
+		this.toRemove.add(e);
 	}
 	
 	public void start() {
