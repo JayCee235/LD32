@@ -12,6 +12,8 @@ public abstract class Entity {
 	
 	protected Game game;
 	
+	protected int pow;
+	
 	public Entity(Game game, int x, int y) {
 		this.x = x;
 		this.y = y;
@@ -37,7 +39,7 @@ public abstract class Entity {
 	}
 	
 	public boolean killOffscreen() {
-		if(this.x + this.w < 0 || this.x > UW.WIDTH || this.y + this.h < 0 || this.y > UW.HEIGHT) {
+		if(!this.inBounds()) {
 			this.game.removeEntity(this);
 			return true;
 		}
@@ -45,8 +47,10 @@ public abstract class Entity {
 	}
 	
 	public void draw(Graphics g) {
-		g.setColor(this.color);
-		g.fillRect(this.x, this.y, w, h);
+		if (this.inBounds()) {
+			g.setColor(this.color);
+			g.fillRect(this.x, this.y, w, h);
+		}
 	}
 	
 	public void move(Direction d) {
@@ -64,5 +68,17 @@ public abstract class Entity {
 	public void movepx(int dx, int dy) {
 		this.x += dx;
 		this.y += dy;
+	}
+	
+	public boolean inBounds() {
+		return !(this.x + this.w < 0 || this.x > UW.WIDTH || this.y + this.h < 0 || this.y > UW.HEIGHT);
+	}
+	
+	public boolean collidingWith(Entity e) {
+		return this.x < e.x + e.w && this.y < e.y + e.h && e.x < this.x + this.w && e.y < this.y + this.h;
+	}
+	
+	public void die() {
+		this.game.removeEntity(this);
 	}
 }

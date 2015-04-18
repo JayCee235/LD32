@@ -1,6 +1,8 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Player extends Entity{
 	private int[] controls;
@@ -10,14 +12,25 @@ public class Player extends Entity{
 	
 	private Game game;
 	
+	private boolean buffed;
+	
+	private HashMap<Powerup, Integer> buffs;
+	
 	private int dx, dy, microdx, micrody;
 
 	public Player(Game game, int x, int y, boolean[] keys) {
 		super(game, x, y, 30);
+		buffs = new HashMap<Powerup, Integer>();
+		
+		for(Powerup p : Powerup.list()) {
+			buffs.put(p, 0);
+		}
 		
 		this.color = Color.red;
 		
 		this.microdx = this.micrody = 0;
+		
+		pow = 5;
 		
 		this.keys = keys;
 		
@@ -25,6 +38,11 @@ public class Player extends Entity{
 				KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_DOWN, KeyEvent.VK_RIGHT};
 		
 		this.game = game;
+	}
+	
+	public void friction() {
+		this.microdx *= 0.9;
+		this.micrody *= 0.9;
 	}
 	
 	public void stopOffscreen() {
@@ -50,8 +68,51 @@ public class Player extends Entity{
 		}
 	}
 	
+	public boolean hasBuff(Powerup p) {
+		return buffs.get(p) > 0;
+	}
+	
+	public void addBuff(Powerup p) {
+		buffs.put(p, 3 * 1000/60);
+	}
+	
+	public void applyBuffs() {
+		if (!buffed) {
+			for (Powerup p : buffs.keySet()) {
+				if (buffs.get(p) > 0) {
+					p.apply(this);
+				}
+			}
+			this.buffed = true;
+		}
+	}
+	
+	public void revertBuffs() {
+		if (buffed) {
+			for (Powerup p : buffs.keySet()) {
+				if (buffs.get(p) > 0) {
+					p.revert(this);
+				}
+			}
+			this.buffed = false;
+		}
+	}
+	
+	public void debuff() {
+		for(Powerup p :buffs.keySet()) {
+			buffs.put(p, 0);
+		}
+	}
+	
 	public void tick() {
 		super.tick();
+		this.applyBuffs();
+		int movespeed = this.movespeed;
+		
+		if(keys[KeyEvent.VK_SHIFT]) {
+			movespeed = 5;
+		}
+		
 		Direction[] d = Direction.list();
 		for(int i = 0; i < 4; i++) {
 			if(keys[this.controls[i]]) {
@@ -65,7 +126,7 @@ public class Player extends Entity{
 		}
 		for(int i = 4; i < 8; i++) {
 			if(this.cooldown == 0 && keys[this.controls[i]]) {
-				game.addEntity(new Card(this.game, this.x+8, this.y+8, d[i-4]));
+				game.addEntity(new Card(this.game, this.x+8, this.y+8, d[i-4], pow));
 				this.cooldown = 20;
 				this.microdx -= d[i-4].getX();
 				this.micrody -= d[i-4].getY();
@@ -80,6 +141,14 @@ public class Player extends Entity{
 		this.microy += this.micrody;
 		
 		this.stopOffscreen();
+		
+		this.friction();
+		this.revertBuffs();
+		for(Powerup p : buffs.keySet()) {
+			if (buffs.get(p) > 0) {
+				buffs.put(p, buffs.get(p) - 1);
+			}
+		}
 	}
 	
 

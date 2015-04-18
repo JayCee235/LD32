@@ -14,6 +14,8 @@ public class Game extends JComponent implements KeyListener, Runnable{
 	private boolean[] keys;
 	
 	private Player player;
+	
+	private int sdx, sdy;
 
 	public Game(int w, int h) {
 		Dimension s = new Dimension(w, h);
@@ -32,9 +34,16 @@ public class Game extends JComponent implements KeyListener, Runnable{
 		do {
 			this.addEntity(new Box(this, (int) ((w-32) * Math.random()), (int) ((h-32)*Math.random())));
 		} while (0.2 < Math.random());
+		
+		Powerup.speed.apply(player);
 	}
 	
 	public void movescreen(int dx, int dy) {
+		this.sdx += dx;
+		this.sdy += dy;
+	}
+	
+	private void mvscrn(int dx, int dy) {
 		UW.frame.setLocation(UW.frame.getX() + dx, UW.frame.getY() + dy);
 		for(int i = 1; i < list.size(); i++) {
 			Entity e = this.list.get(i);
@@ -54,6 +63,16 @@ public class Game extends JComponent implements KeyListener, Runnable{
 			this.list.add(this.toAdd.get(0));
 			this.toAdd.remove(0);
 		}
+		
+		int sx = sdx > 100? 100 : sdx;
+		int sy = sdy > 100? 100 : sdy;
+		sx = sx < -100? -100 : sx;
+		sy = sy < -100? -100 : sy;
+		
+		mvscrn(sx, sy);
+		
+		this.sdx -= sx;
+		this.sdy -= sy;
 		
 	}
 	
@@ -109,7 +128,12 @@ public class Game extends JComponent implements KeyListener, Runnable{
 	}
 
 	@Override
+	
 	public void keyTyped(KeyEvent arg0) {
 		
+	}
+
+	public Player getPlayer() {
+		return this.player;
 	}
 }
