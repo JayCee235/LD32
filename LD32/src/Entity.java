@@ -12,7 +12,7 @@ public abstract class Entity {
 	
 	protected Game game;
 	
-	protected int pow;
+	protected int pow, attackspeed;
 	
 	public Entity(Game game, int x, int y) {
 		this.x = x;
@@ -20,6 +20,9 @@ public abstract class Entity {
 		this.w = 32;
 		this.h = 32;
 		
+		this.hp = 100;
+		
+		this.attackspeed = 21;
 		
 		this.movespeed = 1;
 		
@@ -29,6 +32,15 @@ public abstract class Entity {
 	public Entity(Game game, int x, int y, int move) {
 		this(game, x, y);
 		this.movespeed = move;
+	}
+	
+	public boolean damage(int dmg) {
+		this.hp -= dmg;
+		if(this.hp <= 0) {
+			this.die();
+			return true;
+		}
+		return false;
 	}
 	
 	public void tick() {

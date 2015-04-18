@@ -73,7 +73,7 @@ public class Player extends Entity{
 	}
 	
 	public void addBuff(Powerup p) {
-		buffs.put(p, 3 * 1000/60);
+		buffs.put(p, 5 * 1000/60);
 	}
 	
 	public void applyBuffs() {
@@ -82,6 +82,8 @@ public class Player extends Entity{
 				if (buffs.get(p) > 0) {
 					p.apply(this);
 				}
+				if(p == Powerup.hp)
+					buffs.put(p, 0);
 			}
 			this.buffed = true;
 		}
@@ -127,7 +129,7 @@ public class Player extends Entity{
 		for(int i = 4; i < 8; i++) {
 			if(this.cooldown == 0 && keys[this.controls[i]]) {
 				game.addEntity(new Card(this.game, this.x+8, this.y+8, d[i-4], pow));
-				this.cooldown = 20;
+				this.cooldown = this.attackspeed;
 				this.microdx -= d[i-4].getX();
 				this.micrody -= d[i-4].getY();
 				

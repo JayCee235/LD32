@@ -26,6 +26,15 @@ public class Card extends Entity{
 	
 	public void tick() {
 		this.move(this.d);
+		for(Enemy e : game.enemies) {
+			if(this.collidingWith(e)) {
+				e.damage(20);
+				this.die();
+				break;
+			}
+		}
+		
+		
 		if(this.killOffscreen()) {
 			if (this.pow >= 0) {
 				game.movescreen(pow * d.getX(), pow * d.getY());
