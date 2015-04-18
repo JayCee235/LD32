@@ -16,7 +16,9 @@ public class UnconventionalWeapon {
 	public UnconventionalWeapon() {
 		this.frame = new JFrame(TITLE);
 		this.game = new Game(WIDTH, HEIGHT);
+		
 		this.frame.add(this.game);
+		this.frame.addKeyListener(this.game);
 		
 		this.frame.pack();
 		this.frame.setLocationRelativeTo(null);
@@ -24,6 +26,8 @@ public class UnconventionalWeapon {
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		this.frame.setVisible(true);
+		
+		game.start();
 		
 	}
 }
