@@ -12,11 +12,12 @@ public class Card extends Entity{
 	
 	public void tick() {
 		this.move(this.d);
+		this.killOffscreen();
 	}
 	
 	public void draw(Graphics g) {
-		g.setColor(Color.red);
-		g.fillRect(this.x, this.y, 32, 32);
+		g.setColor(Color.blue);
+		g.fillRect(this.x, this.y, 16, 16);
 	}
 
 }

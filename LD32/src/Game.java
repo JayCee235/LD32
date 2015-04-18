@@ -34,11 +34,13 @@ public class Game extends JComponent implements KeyListener, Runnable{
 		for(int i = 0; i < list.size(); i++) {
 			list.get(i).tick();
 		}
-		for(int i = 0; i < toRemove.size(); i++) {
-			list.remove(toRemove.get(i));
+		while(!this.toRemove.isEmpty()) {
+			this.list.remove(this.toRemove.get(0));
+			this.toRemove.remove(0);
 		}
-		for(int i = 0; i < toAdd.size(); i++) {
-			list.add(toAdd.get(i));
+		while(!this.toAdd.isEmpty()) {
+			this.list.add(this.toAdd.get(0));
+			this.toAdd.remove(0);
 		}
 		
 	}

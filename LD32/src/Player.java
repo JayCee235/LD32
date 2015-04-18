@@ -30,7 +30,7 @@ public class Player extends Entity{
 		}
 		for(int i = 4; i < 8; i++) {
 			if(this.cooldown == 0 && keys[this.controls[i]]) {
-				game.addEntity(new Card(this.game, this.x, this.y, d[i-4]));
+				game.addEntity(new Card(this.game, this.x+8, this.y+8, d[i-4]));
 				this.cooldown = 20;
 			}
 		}
