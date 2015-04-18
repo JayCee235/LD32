@@ -20,4 +20,15 @@ public enum Direction {
 	public int getY() {
 		return this.y;
 	}
+	
+	public static Direction getDirection(int x, int y) {
+		int dx = UW.clamp(x, -1, 1);
+		int dy = UW.clamp(y, -1, 1);
+		
+		if(x == -1) return left;
+		if(x == 1) return right;
+		if(y == -1) return up;
+		if(y == 1) return down;
+		return down;
+	}
 }

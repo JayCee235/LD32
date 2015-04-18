@@ -8,16 +8,17 @@ public class Card extends Entity{
 	public Card(Game game, int x, int y, Direction d) {
 		super(game, x, y, 6);
 		this.d = d;
+		this.color = color.blue;
+		
+		this.w = 16;
+		this.h = 16;
 	}
 	
 	public void tick() {
 		this.move(this.d);
-		this.killOffscreen();
-	}
-	
-	public void draw(Graphics g) {
-		g.setColor(Color.blue);
-		g.fillRect(this.x, this.y, 16, 16);
+		if(this.killOffscreen()) {
+			game.movescreen(5*d.getX(), 5*d.getY());
+		}
 	}
 
 }

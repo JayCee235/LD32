@@ -28,6 +28,18 @@ public class Game extends JComponent implements KeyListener, Runnable{
 		
 		this.player = new Player(this, 100, 100, keys);
 		this.list.add(this.player);
+		
+		do {
+			this.addEntity(new Box(this, (int) ((w-32) * Math.random()), (int) ((h-32)*Math.random())));
+		} while (0.2 < Math.random());
+	}
+	
+	public void movescreen(int dx, int dy) {
+		UW.frame.setLocation(UW.frame.getX() + dx, UW.frame.getY() + dy);
+		for(int i = 1; i < list.size(); i++) {
+			Entity e = this.list.get(i);
+			e.movepx(-dx, -dy);
+		}
 	}
 	
 	public void tick() {
